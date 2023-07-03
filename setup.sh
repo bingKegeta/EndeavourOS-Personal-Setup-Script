@@ -1,10 +1,6 @@
 !#!/usr/bin/env bash
 # -*- coding: utf-8 -*-
 
-# Check if user has access to root
-sudo -n true
-test $? -eq 0 || exit 1 "sudo priviledge needed to run this script"
-
 # Start and enable bluetooth
 sudo systemctl start bluetooth
 sudo systemctl enable bluetooth
@@ -27,4 +23,19 @@ echo Chaotic AUR set up!
 sudo pacman -S --needed < base_packages.list
 
 # Download the gnome shell extensions to be used
+# Extensions not in the AUR:
+#   -> Aylur's Widgets
+#   -> User Themes
 yay -S --needed < shell_extensions.list
+
+# Manually Download and setup the unavailable extensions
+
+# Aylur's Widgets
+mkdir Git
+git clone https://github.com/Aylur/gnome-extensions.git ~/Git
+mkdir -p ~/.local/share/gnome-shell/extensions
+cp -r ~/Git/Aylur/widgets@aylur ~/.local/share/gnome-shell/extensions/
+
+# User Themes
+git clone https://gitlab.gnome.org/GNOME/gnome-shell-extensions.git ~/Git
+cp -r ~/Git/gnome-shell-extensions/extensions/user-theme ~/.local/share/gnome-shell/extensions
